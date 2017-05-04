@@ -1,4 +1,3 @@
-mysqldump: [Warning] Using a password on the command line interface can be insecure.
 -- MySQL dump 10.13  Distrib 5.7.18, for Linux (x86_64)
 --
 -- Host: localhost    Database: trendfa
@@ -15,6 +14,14 @@ mysqldump: [Warning] Using a password on the command line interface can be insec
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `trendfa`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `trendfa` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `trendfa`;
 
 --
 -- Table structure for table `tweet`
@@ -58,4 +65,4 @@ CREATE TABLE `word` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-04 14:56:39
+-- Dump completed on 2017-05-04 15:06:10

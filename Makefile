@@ -1,6 +1,6 @@
 
 dump-schema:
-		docker-compose exec db mysqldump --no-data -ptoor trendfa > schema.sql
+		docker-compose exec db mysqldump --no-data -ptoor --databases trendfa > schema.sql
 
 load-schema:
 		docker-compose exec db mysql -ptoor trendfa < schema.sql
