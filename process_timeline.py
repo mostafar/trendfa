@@ -33,12 +33,13 @@ def limit_handled(cursor):
     while True:
         try:
             yield cursor.next()
-        except tweepy.RateLimitError:
+        except (tweepy.RateLimitError, tweepy.error.TweepError) as e:
+            print('RATE LIMIT, Sleeping 15 minutes')
             time.sleep(15 * 60)
 
 
 if __name__ == '__main__':
-    for status in limit_handled(tweepy.Cursor(twitter_api.home_timeline).items()):
+    for status in limit_handled(tweepy.Cursor(twitter_api.home_timeline).items(900)):
         print('PROCESSED: {}'.format(status.id))
         if not session.query(exists().where(Tweet.twitter_id == status.id)).scalar():
             process_tweet(status)
