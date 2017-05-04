@@ -2,7 +2,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base
 
-engine = create_engine('sqlite:///trendfa.db')
+DOCKER_HOST = 'localhost'
+
+# CONNECTION_STRING = 'sqlite:///trendfa.db'
+CONNECTION_STRING = 'mysql+pymysql://root:toor@{}:13306/trendfa'.format(DOCKER_HOST)
+
+engine = create_engine(CONNECTION_STRING)
 
 Session = sessionmaker()
 Session.configure(bind=engine)

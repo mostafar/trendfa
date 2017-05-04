@@ -3,7 +3,6 @@ from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import Text
-from sqlalchemy import types
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -13,7 +12,7 @@ Base = declarative_base()
 class Tweet(Base):
     __tablename__ = 'tweet'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     twitter_id = Column(Text, unique=True)
     text = Column(Text)
     time = Column(DateTime)
@@ -24,7 +23,7 @@ class Tweet(Base):
 class Word(Base):
     __tablename__ = 'word'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     word = Column(Text)
     time = Column(DateTime)
 

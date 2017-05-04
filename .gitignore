@@ -91,3 +91,4 @@ ENV/
 # Database
 trendfa.db
 
+.idea/

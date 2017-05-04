@@ -1,0 +1,7 @@
+db:
+    image: mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: toor
+    ports:
+        - 3306:3306
+
