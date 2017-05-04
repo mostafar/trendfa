@@ -1,7 +1,14 @@
-db:
-    image: mysql
-    environment:
-        MYSQL_ROOT_PASSWORD: toor
-    ports:
-        - 3306:3306
+version: '2'
+services:
+    db:
+        image: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: toor
+    
+    trendfa:
+        build: .
+        volumes:
+          - .:/src
+        links:
+          - db:mysql
 
