@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base
 
-DOCKER_HOST = 'localhost'
+DOCKER_HOST = 'mysql'
 
 # CONNECTION_STRING = 'sqlite:///trendfa.db'
 CONNECTION_STRING = 'mysql+pymysql://root:toor@{}:13306/trendfa'.format(DOCKER_HOST)
