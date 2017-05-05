@@ -5,7 +5,7 @@ from models import Base
 DOCKER_HOST = 'mysql'
 
 # CONNECTION_STRING = 'sqlite:///trendfa.db'
-CONNECTION_STRING = 'mysql+pymysql://root:toor@{}/trendfa'.format(DOCKER_HOST)
+CONNECTION_STRING = 'mysql+pymysql://root:password@{}/trendfa'.format(DOCKER_HOST)
 
 engine = create_engine(CONNECTION_STRING)
 

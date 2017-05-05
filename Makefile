@@ -6,4 +6,7 @@ load-schema:
 		docker-compose exec db mysql -ptoor trendfa < schema.sql
 
 process-timeline:
-		docker-compose exec trendfa python3 process_timeline.py
+		docker-compose run -d trendfa python3 process_timeline.py
+
+mysql:
+		docker-compose exec db mysql trendfa
