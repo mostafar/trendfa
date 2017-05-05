@@ -28,4 +28,11 @@ def get_trends_tweet():
 
 
 if __name__ == '__main__':
-    twitter_api.update_status(get_trends_tweet())
+    import sys
+
+    trends = get_trends_tweet()
+
+    print (trends.encode('utf-8'))
+
+    if len(sys.argv) > 1 and sys.argv[1] == '--send':
+        twitter_api.update_status(trends)
