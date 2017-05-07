@@ -6,16 +6,16 @@ mysql:
 		docker-compose exec db mysql trendfa
 
 process-timeline:
-		docker-compose run -d trendfa python3 process_timeline.py
+		docker-compose run -d trendfa python3 -m trendfa.process_timeline
 
 trends:
-		docker-compose run trendfa python3 tweet_trends.py
+		docker-compose run trendfa python3 -m trendfa.tweet_trends
 
 tweet-trends:
-		docker-compose run trendfa python3 tweet_trends.py --send
+		docker-compose run trendfa python3 -m trendfa.tweet_trends --send
 
 records:
-		docker-compose run trendfa python3 tweet_records.py
+		docker-compose run trendfa python3 -m trendfa.tweet_records
 
 tweet-records:
-		docker-compose run trendfa python3 tweet_records.py --send
+		docker-compose run trendfa python3 -m trendfa.tweet_records --send
