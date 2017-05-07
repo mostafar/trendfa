@@ -10,3 +10,9 @@ process-timeline:
 
 mysql:
 		docker-compose exec db mysql trendfa
+
+trends:
+		docker-compose run trendfa python3 tweet_trends.py
+
+tweet-trends:
+		docker-compose run trendfa python3 tweet_trends.py --send

@@ -16,6 +16,8 @@ class Tweet(Base):
     twitter_id = Column(Text, unique=True)
     text = Column(Text)
     time = Column(DateTime)
+    likes = Column(Integer)
+    retweets = Column(Integer)
 
     words = relationship('Word', back_populates='tweet')
 
