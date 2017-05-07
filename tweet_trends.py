@@ -32,7 +32,8 @@ if __name__ == '__main__':
 
     trends = get_trends_tweet()
 
-    print (trends.encode('utf-8'))
+    print (trends)
 
     if len(sys.argv) > 1 and sys.argv[1] == '--send':
         twitter_api.update_status(trends)
+        print ('Sent')
