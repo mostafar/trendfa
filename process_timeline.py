@@ -9,7 +9,7 @@ from database import session
 
 
 def process_tweet(status):
-    tweet = session.query(Tweet).filter(Tweet.twitter_id == status.id)
+    tweet = session.query(Tweet).filter(Tweet.twitter_id == status.id).first()
 
     if tweet is None:
         tweet = Tweet(
