@@ -2,11 +2,11 @@
 
 from datetime import datetime, timedelta
 
+from trendfa.database import session
+from trendfa.models import Tweet
 from sqlalchemy import desc
 
-from database import session
-from models import Word, Tweet
-from twitter import api as twitter_api
+from trendfa.twitter import api as twitter_api
 
 
 def get_most_liked(time_range):

@@ -1,11 +1,13 @@
 # -*- coding: UTF-8 -*-
 
 import time
+
 import tweepy
-from twitter import api as twitter_api
-from models import Tweet, Word
-from text_analyzer import get_names
-from database import session
+from trendfa.database import session
+from trendfa.models import Tweet, Word
+from trendfa.text_analyzer import get_names
+
+from trendfa.twitter import api as twitter_api
 
 
 def process_tweet(status):
