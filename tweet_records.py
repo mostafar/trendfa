@@ -2,6 +2,8 @@
 
 from datetime import datetime, timedelta
 
+from sqlalchemy import desc
+
 from database import session
 from models import Word, Tweet
 from twitter import api as twitter_api
@@ -10,14 +12,14 @@ from twitter import api as twitter_api
 def get_most_liked(time_range):
     return session.query(Tweet)\
         .filter(Tweet.time >= (datetime.now() - time_range))\
-        .order_by(Tweet.likes)\
+        .order_by(desc(Tweet.likes))\
         .first()
 
 
 def get_most_retweeted(time_range):
     return session.query(Tweet)\
         .filter(Tweet.time >= (datetime.now() - time_range))\
-        .order_by(Tweet.retweets)\
+        .order_by(desc(Tweet.retweets))\
         .first()
 
 
