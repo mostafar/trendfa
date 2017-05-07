@@ -34,8 +34,8 @@ if __name__ == '__main__':
     most_liked_tweet = get_most_liked(timedelta(days=2))
     most_retweeted_tweet = get_most_retweeted(timedelta(days=2))
 
-    print('Most liked: {}'.format(most_liked_tweet.text))
-    print('Most retweeted: {}'.format(most_retweeted_tweet.text))
+    print('Most liked ({}): {}'.format(most_liked_tweet.likes, most_liked_tweet.text))
+    print('Most retweeted ({}): {}'.format(most_retweeted_tweet.retweets, most_retweeted_tweet.text))
 
     import sys
     if len(sys.argv) > 1 and sys.argv[1] == '--send':
