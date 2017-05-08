@@ -37,11 +37,11 @@ if __name__ == '__main__':
     print('Most liked ({}): {}'.format(most_liked_tweet.likes, most_liked_tweet.text))
     print('Most retweeted ({}): {}'.format(most_retweeted_tweet.retweets, most_retweeted_tweet.text))
 
-    if len(sys.argv) > 1 and sys.argv[1] == '--send-like':
+    if len(sys.argv) > 1 and sys.argv[1] == '--send-likes':
         twitter_api.update_status('بیشترین لایک در ۲۴ ساعت گذشته: \n {}'.format(get_tweet_link(most_liked_tweet)))
         print ('Sent')
 
-    if len(sys.argv) > 1 and sys.argv[1] == '--send-retweet':
+    if len(sys.argv) > 1 and sys.argv[1] == '--send-retweets':
         twitter_api.update_status(
             'بیشترین ریتوییت در ۲۴ ساعت گذشته: \n {}'.format(get_tweet_link(most_retweeted_tweet))
         )

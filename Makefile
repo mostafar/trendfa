@@ -17,5 +17,8 @@ tweet-trends:
 records:
 		docker-compose run trendfa python3 -m trendfa.tweet_records
 
-tweet-records:
-		docker-compose run trendfa python3 -m trendfa.tweet_records --send
+tweet-likes:
+		docker-compose run trendfa python3 -m trendfa.tweet_records --send-likes
+
+tweet-retweets:
+		docker-compose run trendfa python3 -m trendfa.tweet_records --send-retweets
