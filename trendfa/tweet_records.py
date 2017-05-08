@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 
+import sys
+
 from datetime import datetime, timedelta
 
 from trendfa.database import session
@@ -27,19 +29,20 @@ def get_tweet_link(tweet):
     return 'https://twitter.com/anything/status/{}'.format(tweet.twitter_id)
 
 
-def tweet_records(most_liked_tweet, most_retweeted_tweet):
-    twitter_api.update_status('بیشترین لایک در ۲۴ ساعت گذشته: \n {}'.format(get_tweet_link(most_liked_tweet)))
-    twitter_api.update_status('بیشترین ریتوییت در ۲۴ ساعت گذشته: \n {}'.format(get_tweet_link(most_retweeted_tweet)))
-
 
 if __name__ == '__main__':
-    most_liked_tweet = get_most_liked(timedelta(days=2))
-    most_retweeted_tweet = get_most_retweeted(timedelta(days=2))
+    most_liked_tweet = get_most_liked(timedelta(days=1))
+    most_retweeted_tweet = get_most_retweeted(timedelta(days=1))
 
     print('Most liked ({}): {}'.format(most_liked_tweet.likes, most_liked_tweet.text))
     print('Most retweeted ({}): {}'.format(most_retweeted_tweet.retweets, most_retweeted_tweet.text))
 
-    import sys
-    if len(sys.argv) > 1 and sys.argv[1] == '--send':
-        tweet_records(most_liked_tweet, most_retweeted_tweet)
+    if len(sys.argv) > 1 and sys.argv[1] == '--send-like':
+        twitter_api.update_status('بیشترین لایک در ۲۴ ساعت گذشته: \n {}'.format(get_tweet_link(most_liked_tweet)))
+        print ('Sent')
+
+    if len(sys.argv) > 1 and sys.argv[1] == '--send-retweet':
+        twitter_api.update_status(
+            'بیشترین ریتوییت در ۲۴ ساعت گذشته: \n {}'.format(get_tweet_link(most_retweeted_tweet))
+        )
         print ('Sent')
