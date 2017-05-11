@@ -9,8 +9,14 @@ from trendfa.text_analyzer import get_names
 
 from trendfa.twitter import api as twitter_api
 
+TWEETS_TO_PROCESS_COUNT = 900
+
 
 def process_tweet(status):
+    if status.lang != 'fa':
+        print('This is not persian :(')
+        return
+
     tweet = session.query(Tweet).filter(Tweet.twitter_id == status.id).first()
 
     if tweet is None:
@@ -46,6 +52,6 @@ def limit_handled(cursor):
 
 
 if __name__ == '__main__':
-    for status in limit_handled(tweepy.Cursor(twitter_api.home_timeline).items(900)):
+    for status in limit_handled(tweepy.Cursor(twitter_api.home_timeline).items(TWEETS_TO_PROCESS_COUNT)):
         print('PROCESSED: {}'.format(status.id))
         process_tweet(status)
