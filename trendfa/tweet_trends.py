@@ -3,11 +3,13 @@
 from datetime import datetime, timedelta
 
 from trendfa.database import session
-from trendfa.models import Word
+from trendfa.models import Word, Tweet
 from sqlalchemy import desc
 from sqlalchemy import func
 
 from trendfa.twitter import api as twitter_api
+
+TIME_RANGE = timedelta(days=1)
 
 
 def get_trends(time_range, limit=7):
@@ -18,11 +20,25 @@ def get_trends(time_range, limit=7):
         .limit(limit).all()
 
 
+def get_all_tweets_count(time_range):
+    return session.query(func.count(Tweet.id)).filter(Tweet.time >= (datetime.now() - time_range)).scalar()
+
+
 def get_trends_tweet():
     text = 'ترند در ۲۴ ساعت گذشته:\n'
 
-    for word, count in get_trends(timedelta(days=1)):
-        text += '- {}\n'.format(word.encode('latin1').decode('utf-8'))
+    all_tweets_count = get_all_tweets_count(TIME_RANGE)
+
+    for word, count in get_trends(TIME_RANGE):
+        to_add = '- {word} ({percentage:.0f}%)\n'.format(
+            word=word.encode('latin1').decode('utf-8'),
+            percentage=(100 * count / all_tweets_count)
+        )
+
+        if len(text) + len(to_add) > 160:
+            break
+
+        text += to_add
 
     return text
 
