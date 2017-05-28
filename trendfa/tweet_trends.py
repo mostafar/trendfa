@@ -10,6 +10,11 @@ from sqlalchemy import func
 from trendfa.twitter import api as twitter_api
 
 TIME_RANGE = timedelta(days=1)
+LATIN_TO_PERSIAN = {latin: persian for latin, persian in [('0', '۰'), ('1', '۱'), ('2', '۲'), ('3', '۳'), ('4', '۴'), ('5', '۵'), ('6', '۶'), ('7', '۷'), ('8', '۸'), ('9', '۹'),]}
+
+def persian_number(number):
+    number = str(number)
+    return ''.join([LATIN_TO_PERSIAN[c] if c in LATIN_TO_PERSIAN else c for c in number])
 
 
 def get_trends(time_range, limit=7):
@@ -30,9 +35,14 @@ def get_trends_tweet():
     all_tweets_count = get_all_tweets_count(TIME_RANGE)
 
     for word, count in get_trends(TIME_RANGE):
-        to_add = '- {word} ({percentage:.0f}%)\n'.format(
+        percentage = 100 * count / all_tweets_count
+
+        if percentage < 3:
+            continue
+
+        to_add = '- {word} - {percentage}%\n'.format(
             word=word.encode('latin1').decode('utf-8'),
-            percentage=(100 * count / all_tweets_count)
+            percentage=persian_number('{:.0f}'.format(percentage))
         )
 
         if len(text) + len(to_add) > 160:
