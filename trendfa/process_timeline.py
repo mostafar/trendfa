@@ -9,7 +9,7 @@ from trendfa.text_analyzer import get_names
 
 from trendfa.twitter import api as twitter_api
 
-TWEETS_TO_PROCESS_COUNT = 900
+TWEETS_TO_PROCESS_COUNT = 1500
 
 
 def process_tweet(status):

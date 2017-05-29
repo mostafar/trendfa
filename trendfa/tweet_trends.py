@@ -34,12 +34,13 @@ def get_trends_tweet():
 
     all_tweets_count = get_all_tweets_count(TIME_RANGE)
 
-    for word, count in get_trends(TIME_RANGE):
-        percentage = 100 * count / all_tweets_count
+    trends = [(word, round(100.0 * count / all_tweets_count)) for word, count in get_trends(TIME_RANGE)]
+    qualified_trends = [(word, percentage) for word, percentage in trends if percentage >= 3 - 0.001]
 
-        if percentage < 3:
-            continue
+    if len(qualified_trends) == 0:
+        return None
 
+    for word, percentage in qualified_trends:
         to_add = '- {word} - {percentage}%\n'.format(
             word=word.encode('latin1').decode('utf-8'),
             percentage=persian_number('{:.0f}'.format(percentage))
@@ -60,6 +61,7 @@ if __name__ == '__main__':
 
     print (trends)
 
-    if len(sys.argv) > 1 and sys.argv[1] == '--send':
+    if len(sys.argv) > 1 and sys.argv[1] == '--send' and trends is not None:
         twitter_api.update_status(trends)
         print ('Sent')
+
