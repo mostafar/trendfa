@@ -35,7 +35,7 @@ def get_trends_tweet():
     all_tweets_count = get_all_tweets_count(TIME_RANGE)
 
     trends = [(word, round(100.0 * count / all_tweets_count)) for word, count in get_trends(TIME_RANGE)]
-    qualified_trends = [(word, percentage) for word, percentage in trends if percentage >= 3 - 0.001]
+    qualified_trends = [(word, percentage) for index, (word, percentage) in enumerate(trends) if index < 3 or percentage >= 3 - 0.001]
 
     if len(qualified_trends) == 0:
         return None
