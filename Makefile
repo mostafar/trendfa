@@ -14,6 +14,12 @@ trends:
 tweet-trends:
 		docker-compose run trendfa python3 -m trendfa.tweet_trends --send
 
+hashtags:
+		docker-compose run trendfa python3 -m trendfa.tweet_hashtags
+
+tweet-hashtags:
+		docker-compose run trendfa python3 -m trendfa.tweet_hashtags --send
+
 records:
 		docker-compose run trendfa python3 -m trendfa.tweet_records
 
