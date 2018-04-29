@@ -19,6 +19,8 @@ class Tweet(Base):
     likes = Column(Integer)
     retweets = Column(Integer)
 
+    author_id = Column(Integer, ForeignKey('author.id'))
+    author = relationship('Author')
     words = relationship('Word', back_populates='tweet')
 
 
@@ -31,3 +33,13 @@ class Word(Base):
 
     tweet_id = Column(Integer, ForeignKey('tweet.id'))
     tweet = relationship('Tweet', back_populates='words')
+
+
+class Author(Base):
+    __tablename__ = 'author'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    twitter_id = Column(Text, unique=True)
+    screen_name = Column(Text)
+    followers_count = Column(Integer)
+

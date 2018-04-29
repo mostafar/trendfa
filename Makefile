@@ -28,3 +28,6 @@ tweet-likes:
 
 tweet-retweets:
 		docker-compose run trendfa python3 -m trendfa.tweet_records --send-retweets
+
+tweet-talent:
+		docker-compose run trendfa python3 -m trendfa.tweet_records --send-talent

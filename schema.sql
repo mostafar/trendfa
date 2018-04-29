@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.18, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Linux (x86_64)
 --
 -- Host: localhost    Database: trendfa
 -- ------------------------------------------------------
--- Server version	5.7.18
+-- Server version	5.7.12
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,18 +16,21 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `trendfa`
+-- Table structure for table `author`
 --
 
-CREATE USER 'root'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
-CREATE USER 'root'@'%' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `trendfa` /*!40100 DEFAULT CHARACTER SET latin1 */;
-
-USE `trendfa`;
+DROP TABLE IF EXISTS `author`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `author` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `twitter_id` varchar(256) DEFAULT NULL,
+  `screen_name` text,
+  `followers_count` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `twitter_id` (`twitter_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `tweet`
@@ -41,9 +44,12 @@ CREATE TABLE `tweet` (
   `twitter_id` varchar(256) DEFAULT NULL,
   `text` text,
   `time` datetime DEFAULT NULL,
+  `likes` int(11) NOT NULL DEFAULT '0',
+  `retweets` int(11) NOT NULL DEFAULT '0',
+  `author_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `twitter_id` (`twitter_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=298 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=529837 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -58,8 +64,10 @@ CREATE TABLE `word` (
   `word` text,
   `time` datetime DEFAULT NULL,
   `tweet_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=724 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  KEY `first_character` (`word`(1)),
+  KEY `first_ten_characters` (`word`(10))
+) ENGINE=InnoDB AUTO_INCREMENT=2343493 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -71,4 +79,4 @@ CREATE TABLE `word` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-04 15:06:10
+-- Dump completed on 2017-09-21 21:48:57

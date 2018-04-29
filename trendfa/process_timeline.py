@@ -1,10 +1,14 @@
 # -*- coding: UTF-8 -*-
 
 import time
+import json
 
 import tweepy
+
+from settings import TWEETS_LANG
+
 from trendfa.database import session
-from trendfa.models import Tweet, Word
+from trendfa.models import Author, Tweet, Word
 from trendfa.text_analyzer import get_names
 
 from trendfa.twitter import api as twitter_api
@@ -13,9 +17,28 @@ TWEETS_TO_PROCESS_COUNT = 1500
 
 
 def process_tweet(status):
-    if status.lang != 'fa':
+    with open('tweets.log', 'a') as log_file:
+        log_file.write('{}\n'.format(json.dumps(status._json)))
+
+    if status.lang != TWEETS_LANG:
         print('This is not persian :(')
         return
+
+    author = session.query(Author).filter(Author.twitter_id == status.author.id_str).first()
+
+    if author is None:
+        author = Author(
+            twitter_id=status.author.id_str,
+            screen_name=status.author.screen_name,
+            followers_count=status.author.followers_count,
+        )
+
+        session.add(author)
+
+    author.screen_name = status.author.screen_name
+    author.followers_count = status.author.followers_count
+
+    session.commit()
 
     tweet = session.query(Tweet).filter(Tweet.twitter_id == status.id).first()
 
@@ -24,6 +47,7 @@ def process_tweet(status):
             twitter_id=status.id,
             text=status.text.encode('utf-8'),
             time=status.created_at,
+            author=author,
         )
 
         session.add(tweet)
