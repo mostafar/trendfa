@@ -21,18 +21,6 @@ class Tweet(Base):
 
     author_id = Column(Integer, ForeignKey('author.id'))
     author = relationship('Author')
-    words = relationship('Word', back_populates='tweet')
-
-
-class Word(Base):
-    __tablename__ = 'word'
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    word = Column(Text)
-    time = Column(DateTime)
-
-    tweet_id = Column(Integer, ForeignKey('tweet.id'))
-    tweet = relationship('Tweet', back_populates='words')
 
 
 class Author(Base):

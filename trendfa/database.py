@@ -3,14 +3,15 @@ from sqlalchemy.orm import sessionmaker
 
 from trendfa.models import Base
 
-from settings import DATABASE_HOST, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD
+import settings
 
 # CONNECTION_STRING = 'sqlite:///trendfa.db'
-CONNECTION_STRING = 'mysql+pymysql://{user}:{password}@{host}/{database}'.format(
-    host=DATABASE_HOST,
-    database=DATABASE_NAME,
-    user=DATABASE_USER,
-    password=DATABASE_PASSWORD,
+CONNECTION_STRING = 'mysql+pymysql://{user}:{password}@{host}:{port}/{database}?charset=utf8mb4'.format(
+    host=settings.DATABASE_HOST,
+    port=settings.DATABASE_PORT,
+    database=settings.DATABASE_NAME,
+    user=settings.DATABASE_USER,
+    password=settings.DATABASE_PASSWORD,
 )
 
 engine = create_engine(CONNECTION_STRING)

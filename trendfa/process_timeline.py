@@ -5,65 +5,69 @@ import json
 
 import tweepy
 
+from dateutil import parser as datetime_parser
+
 from settings import TWEETS_LANG
 
 from trendfa.database import session
-from trendfa.models import Author, Tweet, Word
+from trendfa.models import Author, Tweet
 from trendfa.text_analyzer import get_names
 
 from trendfa.twitter import api as twitter_api
 
-TWEETS_TO_PROCESS_COUNT = 1500
+MAX_TWEETS_TO_PROCESS_COUNT = 800
 
 
 def process_tweet(status):
-    with open('tweets.log', 'a') as log_file:
-        log_file.write('{}\n'.format(json.dumps(status._json)))
-
-    if status.lang != TWEETS_LANG:
-        print('This is not persian :(')
+    if 'retweeted_status' in status:
+        print ('Skipping retweet')
+        process_tweet(status['retweeted_status'])
         return
 
-    author = session.query(Author).filter(Author.twitter_id == status.author.id_str).first()
+    if status['lang'] != TWEETS_LANG:
+        print('This is not persian :(')
+        return
+   
+    if 'quoted_status' in status:
+        print ('Processing quoted tweet')
+        process_tweet(status['quoted_status'])
+
+    author = session.query(Author).filter(Author.twitter_id == status['user']['id_str']).first()
 
     if author is None:
         author = Author(
-            twitter_id=status.author.id_str,
-            screen_name=status.author.screen_name,
-            followers_count=status.author.followers_count,
+            twitter_id=status['user']['id_str'],
+            screen_name=status['user']['screen_name'],
+            followers_count=status['user']['followers_count'],
         )
 
         session.add(author)
 
-    author.screen_name = status.author.screen_name
-    author.followers_count = status.author.followers_count
+    author.screen_name = status['user']['screen_name']
+    author.followers_count = status['user']['followers_count']
 
-    session.commit()
+    session.flush()
 
-    tweet = session.query(Tweet).filter(Tweet.twitter_id == status.id).first()
+    tweet = session.query(Tweet).filter(Tweet.twitter_id == status['id']).first()
 
     if tweet is None:
         tweet = Tweet(
-            twitter_id=status.id,
-            text=status.text.encode('utf-8'),
-            time=status.created_at,
+            twitter_id=status['id'],
+            text=status['text'],
+            time=datetime_parser.parse(status['created_at']),
             author=author,
         )
 
         session.add(tweet)
 
-        for name in get_names(status.text):
-            session.add(Word(
-                word=name.encode('utf-8'),
-                time=tweet.time,
-                tweet=tweet,
-            ))
-
-    tweet.likes = status.favorite_count
-    tweet.retweets = status.retweet_count
+    tweet.likes = status['favorite_count']
+    tweet.retweets = status['retweet_count']
 
     session.commit()
-    session.flush()
+
+    if not status['user']['following']:
+        print ('Not following, following {}'.format(status['user']['screen_name']))
+        twitter_api.create_friendship(id=status['user']['id'])
 
 
 def limit_handled(cursor):
@@ -75,7 +79,24 @@ def limit_handled(cursor):
             time.sleep(15 * 60)
 
 
+def process_timeline():
+    while (True):
+        try:
+            statuses = twitter_api.home_timeline(count=MAX_TWEETS_TO_PROCESS_COUNT)
+        except (tweepy.RateLimitError, tweepy.error.TweepError) as e:
+            print('RATE LIMIT, Sleeping 15 minutes')
+            time.sleep(15 * 60)
+            continue
+
+        print ('Fetched {} tweets ...'.format(len(statuses)))
+        with open('tweets.log', 'a') as log_file:
+            for status in statuses:
+                log_file.write('{}\n'.format(json.dumps(status._json)))
+                process_tweet(status._json)
+                print('PROCESSED: {}'.format(status.id))
+
+        time.sleep(1 * 60)
+
+
 if __name__ == '__main__':
-    for status in limit_handled(tweepy.Cursor(twitter_api.home_timeline).items(TWEETS_TO_PROCESS_COUNT)):
-        print('PROCESSED: {}'.format(status.id))
-        process_tweet(status)
+    process_timeline()

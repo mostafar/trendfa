@@ -7,7 +7,11 @@ POSTAGGER_MODEL = 'resources/postagger.model'
 tagger = POSTagger(model=POSTAGGER_MODEL)
 chunker = Chunker(model='resources/chunker.model')
 
-BLACK_LIST = ['RT']
+BLACK_LIST = [
+    'RT',
+    'برای',
+    'این',
+]
 
 
 def is_word_ok(word):

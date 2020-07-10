@@ -1,4 +1,5 @@
 DATABASE_HOST = 'mysql'
+DATABASE_PORT = 3306
 DATABASE_NAME = 'trendfa'
 DATABASE_USER = 'root'
 DATABASE_PASSWORD = 'password'

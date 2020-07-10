@@ -4,7 +4,11 @@ services:
         image: mysql
         environment:
             MYSQL_ROOT_PASSWORD: toor
-    
+        volumes:
+            - /opt/trendfa-mysql:/var/lib/mysql
+        ports:
+            - "13306:3306"
+
     trendfa:
         build: .
         volumes:

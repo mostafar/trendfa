@@ -1,9 +1,13 @@
 # -*- coding: UTF-8 -*-
 
 from datetime import datetime, timedelta
+from collections import defaultdict
+import itertools
 
 from trendfa.database import session
-from trendfa.models import Word, Tweet
+from trendfa.models import Tweet
+from trendfa.tweet_trends import get_tweet_texts
+from trendfa.text_analyzer import get_hash_tags
 from sqlalchemy import desc
 from sqlalchemy import func
 
@@ -12,19 +16,21 @@ from trendfa.twitter import api as twitter_api
 TIME_RANGE = timedelta(days=1)
 
 
+def get_all_hashtags(tweet_texts):
+    return itertools.chain(*[get_hash_tags(tweet_text) for tweet_text in tweet_texts])
+
+
 def get_hashtag_trends(time_range, limit=3):
-    return session.query(Word.word, func.count(Word.id))\
-        .filter(Word.time >= (datetime.now() - time_range))\
-        .filter(func.substr(Word.word, 1, 1) == '#')\
-        .group_by(Word.word)\
-        .order_by(desc(func.count(Word.id)))\
-        .limit(limit).all()
+    hashtags = defaultdict(int)
+    for hashtag in get_all_hashtags(get_tweet_texts(time_range)):
+        hashtags[hashtag] += 1
+    return sorted(hashtags.items(), key=lambda t: t[1], reverse=True)[:limit]
 
 
 def get_trends_tweet():
     return 'هشتگ‌های پر‌طرفدار:\n\n{trends}'.format(
         trends='\n'.join(
-            '- {word}'.format(word=word.encode('latin1').decode('utf-8')) for word, count in get_hashtag_trends(TIME_RANGE)
+            '- {word}'.format(word=word) for word, count in get_hashtag_trends(TIME_RANGE)
         )
     )
 

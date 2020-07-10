@@ -9,25 +9,25 @@ process-timeline:
 		docker-compose run -d trendfa python3 -m trendfa.process_timeline
 
 trends:
-		docker-compose run trendfa python3 -m trendfa.tweet_trends
+		docker-compose run --rm trendfa python3 -m trendfa.tweet_trends
 
 tweet-trends:
-		docker-compose run trendfa python3 -m trendfa.tweet_trends --send
+		docker-compose run --rm trendfa python3 -m trendfa.tweet_trends --send
 
 hashtags:
-		docker-compose run trendfa python3 -m trendfa.tweet_hashtags
+		docker-compose run --rm trendfa python3 -m trendfa.tweet_hashtags
 
 tweet-hashtags:
-		docker-compose run trendfa python3 -m trendfa.tweet_hashtags --send
+		docker-compose run --rm trendfa python3 -m trendfa.tweet_hashtags --send
 
 records:
-		docker-compose run trendfa python3 -m trendfa.tweet_records
+		docker-compose run --rm trendfa python3 -m trendfa.tweet_records
 
 tweet-likes:
-		docker-compose run trendfa python3 -m trendfa.tweet_records --send-likes
+		docker-compose run --rm trendfa python3 -m trendfa.tweet_records --send-likes
 
 tweet-retweets:
-		docker-compose run trendfa python3 -m trendfa.tweet_records --send-retweets
+		docker-compose run --rm trendfa python3 -m trendfa.tweet_records --send-retweets
 
 tweet-talent:
-		docker-compose run trendfa python3 -m trendfa.tweet_records --send-talent
+		docker-compose run --rm trendfa python3 -m trendfa.tweet_records --send-talent
